@@ -14,6 +14,7 @@
 #include "clang/Basic/Diagnostic.h"
 #include "clang/Basic/DiagnosticFrontend.h"
 #include "clang/Basic/DiagnosticOptions.h"
+#include "clang/Basic/DiagnosticParse.h"
 #include "clang/Basic/FileManager.h"
 #include "clang/Basic/LangStandard.h"
 #include "clang/Basic/SourceManager.h"
@@ -132,6 +133,20 @@ bool CompilerInstance::createTarget() {
     setAuxTarget(TargetInfo::CreateTargetInfo(getDiagnostics(), *TO));
   }
 
+  // GCE's runtime has a fixed rounding mode and no exception state. Do not
+  // silently change an explicitly requested floating-point environment.
+  if (getTarget().getTriple().getArch() == llvm::Triple::gce)
+    getDiagnostics().setSeverity(diag::warn_pragma_fp_ignored,
+                                diag::Severity::Error, SourceLocation());
+  if (getTarget().getTriple().getArch() == llvm::Triple::gce &&
+      (getLangOpts().RoundingMath ||
+       getLangOpts().getDefaultExceptionMode() != LangOptions::FPE_Ignore)) {
+    unsigned ID = getDiagnostics().getCustomDiagID(
+        DiagnosticsEngine::Error,
+        "GCE: strict floating-point environment is unsupported");
+    getDiagnostics().Report(ID);
+    return false;
+  }
   if (!getTarget().hasStrictFP() && !getLangOpts().ExpStrictFP) {
     if (getLangOpts().RoundingMath) {
       getDiagnostics().Report(diag::warn_fe_backend_unsupported_fp_rounding);

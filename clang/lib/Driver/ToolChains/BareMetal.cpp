@@ -349,7 +349,7 @@ void BareMetal::findMultilibs(const Driver &D, const llvm::Triple &Triple,
 }
 
 bool BareMetal::handlesTarget(const llvm::Triple &Triple) {
-  return arm::isARMEABIBareMetal(Triple) ||
+  return Triple.getArch() == llvm::Triple::gce || arm::isARMEABIBareMetal(Triple) ||
          aarch64::isAArch64BareMetal(Triple) || isRISCVBareMetal(Triple) ||
          isPPCBareMetal(Triple);
 }
@@ -434,6 +434,13 @@ void BareMetal::addClangTargetOptions(const ArgList &DriverArgs,
                                       ArgStringList &CC1Args,
                                       Action::OffloadKind) const {
   CC1Args.push_back("-nostdsysteminc");
+  if (getTriple().getArch() == llvm::Triple::gce) {
+    for (auto ID : {options::OPT_fPIC, options::OPT_fpic, options::OPT_fPIE,
+                    options::OPT_fpie, options::OPT_pie, options::OPT_shared})
+      if (const Arg *A = DriverArgs.getLastArg(ID))
+        getDriver().Diag(diag::err_drv_unsupported_opt_for_target)
+            << A->getAsString(DriverArgs) << getTriple().str();
+  }
 }
 
 void BareMetal::addLibStdCxxIncludePaths(

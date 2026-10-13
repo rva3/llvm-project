@@ -25,6 +25,12 @@ using namespace object;
 StringRef llvm::object::getELFRelocationTypeName(uint32_t Machine,
                                                  uint32_t Type) {
   switch (Machine) {
+  case ELF::EM_GCE:
+    switch (Type) {
+#include "llvm/BinaryFormat/ELFRelocs/GCE.def"
+    default: break;
+    }
+    break;
   case ELF::EM_68K:
     switch (Type) {
 #include "llvm/BinaryFormat/ELFRelocs/M68k.def"

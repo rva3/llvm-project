@@ -17,6 +17,22 @@ using namespace llvm;
 
 namespace {
 
+TEST(TripleTest, GCE) {
+  Triple T("gce-unknown-none");
+  EXPECT_EQ(Triple::gce, T.getArch());
+  EXPECT_EQ("gce", Triple::getArchTypeName(T.getArch()));
+  EXPECT_EQ(Triple::gce, Triple::getArchTypeForLLVMName("gce"));
+  EXPECT_TRUE(T.isArch32Bit());
+  EXPECT_FALSE(T.isArch64Bit());
+  EXPECT_TRUE(T.isLittleEndian());
+  EXPECT_EQ(Triple::ELF, T.getObjectFormat());
+  EXPECT_EQ(Triple::gce, T.get32BitArchVariant().getArch());
+  EXPECT_EQ(Triple::UnknownArch, T.get64BitArchVariant().getArch());
+  EXPECT_EQ(Triple::gce, T.getLittleEndianArchVariant().getArch());
+  EXPECT_EQ(Triple::UnknownArch, T.getBigEndianArchVariant().getArch());
+  EXPECT_EQ(ExceptionHandling::None, T.getDefaultExceptionHandling());
+}
+
 TEST(TripleTest, BasicParsing) {
   Triple T;
 

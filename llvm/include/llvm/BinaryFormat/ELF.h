@@ -325,6 +325,7 @@ enum {
   EM_VE = 251,            // NEC SX-Aurora VE
   EM_CSKY = 252,          // C-SKY 32-bit processor
   EM_LOONGARCH = 258,     // LoongArch
+  EM_GCE = 0xFECE,       // Experimental project-local MediaTek GCE (unassigned).
 };
 
 // Object file classes.
@@ -1023,6 +1024,12 @@ enum : unsigned {
   EF_MSP430_MACH_MSP430x47 = 47,
   EF_MSP430_MACH_MSP430x54 = 54,
 };
+
+// Experimental GCE static-link relocations.
+enum {
+#include "ELFRelocs/GCE.def"
+};
+enum : unsigned { EF_GCE_ABI_V1 = 1 };
 
 // ELF Relocation types for MSP430
 enum {

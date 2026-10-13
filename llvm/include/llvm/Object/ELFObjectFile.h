@@ -1309,6 +1309,8 @@ StringRef ELFObjectFile<ELFT>::getFileFormatName() const {
       return "elf32-mips";
     case ELF::EM_MSP430:
       return "elf32-msp430";
+    case ELF::EM_GCE:
+      return "elf32-gce";
     case ELF::EM_PPC:
       return (IsLittleEndian ? "elf32-powerpcle" : "elf32-powerpc");
     case ELF::EM_RISCV:
@@ -1393,6 +1395,8 @@ template <class ELFT> Triple::ArchType ELFObjectFile<ELFT>::getArch() const {
     }
   case ELF::EM_MSP430:
     return Triple::msp430;
+  case ELF::EM_GCE:
+    return Triple::gce;
   case ELF::EM_PPC:
     return IsLittleEndian ? Triple::ppcle : Triple::ppc;
   case ELF::EM_PPC64:

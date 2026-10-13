@@ -567,6 +567,8 @@ void tools::AddLinkerInputs(const ToolChain &TC, const InputInfoList &Inputs,
 
 const char *tools::getLDMOption(const llvm::Triple &T, const ArgList &Args) {
   switch (T.getArch()) {
+  case llvm::Triple::gce:
+    return "elf32gce";
   case llvm::Triple::x86:
     if (T.isOSIAMCU())
       return "elf_iamcu";

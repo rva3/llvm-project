@@ -1,0 +1,10 @@
+// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+#ifndef ELF_RELOC
+#error "ELF_RELOC must be defined"
+#endif
+ELF_RELOC(R_GCE_NONE, 0)
+ELF_RELOC(R_GCE_ABS32, 1)
+ELF_RELOC(R_GCE_LDI_ABS32, 2)
+ELF_RELOC(R_GCE_JUMP_REL32, 3)
+// r_offset denotes the start of the instruction, not the patched halfword.
+ELF_RELOC(R_GCE_JUMPC_REL16, 4)

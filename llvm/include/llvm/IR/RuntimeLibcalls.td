@@ -2764,6 +2764,22 @@ def HexagonSystemLibrary
 // Lanai Runtime Libcalls
 //===----------------------------------------------------------------------===//
 
+def isGCE : RuntimeLibcallPredicate<"TT.getArch() == Triple::gce">;
+def GCESystemLibrary : SystemRuntimeLibrary<isGCE,
+  (add memcpy, memmove, memset, memcmp,
+       __divsi3, __udivsi3, __modsi3, __umodsi3,
+       __divdi3, __udivdi3, __moddi3, __umoddi3,
+       __muldi3, __ashldi3, __lshrdi3, __ashrdi3,
+       __addsf3, __adddf3, __subsf3, __subdf3,
+       __mulsf3, __muldf3, __divsf3, __divdf3,
+       __eqsf2, __eqdf2, __nesf2, __nedf2, __gesf2, __gedf2,
+       __ltsf2, __ltdf2, __lesf2, __ledf2, __gtsf2, __gtdf2,
+       __unordsf2, __unorddf2, __extendsfdf2, __truncdfsf2,
+       __floatsisf, __floatsidf, __floatdisf, __floatdidf,
+       __floatunsisf, __floatunsidf, __floatundisf, __floatundidf,
+       __fixsfsi, __fixdfsi, __fixsfdi, __fixdfdi,
+       __fixunssfsi, __fixunsdfsi, __fixunssfdi, __fixunsdfdi)>;
+
 def isLanai : RuntimeLibcallPredicate<"TT.getArch() == Triple::lanai">;
 
 // Use fast calling convention for library functions.

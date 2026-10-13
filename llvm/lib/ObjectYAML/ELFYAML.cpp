@@ -283,6 +283,7 @@ void ScalarEnumerationTraits<ELFYAML::ELF_EM>::enumeration(
   ECase(EM_CR);
   ECase(EM_F2MC16);
   ECase(EM_MSP430);
+  ECase(EM_GCE);
   ECase(EM_BLACKFIN);
   ECase(EM_SE_C33);
   ECase(EM_SEP);
@@ -927,9 +928,13 @@ void ScalarEnumerationTraits<ELFYAML::ELF_REL>::enumeration(
   const auto *Object = static_cast<ELFYAML::Object *>(IO.getContext());
   assert(Object && "The IO context is not initialized");
 #define ELF_RELOC(X, Y) IO.enumCase(Value, #X, ELF::X);
+  // GCE uses an experimental machine identifier and static RELA relocations.
   switch (Object->getMachine()) {
   case ELF::EM_X86_64:
 #include "llvm/BinaryFormat/ELFRelocs/x86_64.def"
+    break;
+  case ELF::EM_GCE:
+#include "llvm/BinaryFormat/ELFRelocs/GCE.def"
     break;
   case ELF::EM_MIPS:
 #include "llvm/BinaryFormat/ELFRelocs/Mips.def"

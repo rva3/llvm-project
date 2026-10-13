@@ -61,6 +61,8 @@ const ELFSyncStream &elf::operator<<(const ELFSyncStream &s, RelType type) {
 
 void elf::setTarget(Ctx &ctx) {
   switch (ctx.arg.emachine) {
+  case EM_GCE:
+    return setGCETargetInfo(ctx);
   case EM_386:
   case EM_IAMCU:
     return setX86TargetInfo(ctx);
